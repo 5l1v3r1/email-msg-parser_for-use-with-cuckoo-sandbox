@@ -1,6 +1,7 @@
 # email-msg-parser_for-use-with-cuckoo-sandbox
 
 Email Parser Code
+Repository:  https://github.com/markconover/email-msg-parser_for-use-with-cuckoo-sandbox
 Date Created: 03/22/2018
 Author: Mark Conover
 Email: mconov01@villanova.edu, conoverm157@gmail.com
