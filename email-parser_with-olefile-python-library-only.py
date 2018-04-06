@@ -20,6 +20,8 @@ from email.parser import Parser as EmailParser
 import traceback
 import requests
 import tempfile
+import xlwt
+from datetime import datetime
 
 def _getStringStream(email_msg, filename, prefer='unicode'):
         """Gets a string representation of the requested filename.
@@ -60,12 +62,64 @@ def windowsUnicode(string):
     else:  # Python 2
         return unicode(string, 'utf_16_le')
 
+
+
+
+
+
+
+
+
+
+
+
+
+    
+class email_attachment_report(object):
+    def __init__(self, name, parent_msg_filename, report_url):
+        self.name = name
+        self.parent_msg_filename = parent_msg_filename
+        self.report_url = report_url
+    
+def output_to_excel_file(email_attachment_report_list):
+    book = xlwt.Workbook()
+    sheet = book.add_sheet("CuckooReport")
+
+    col1_name = "Email Attachment Name"
+    col2_name = "Parent .msg Filename"
+    col3_name = "Cuckoo Report URL"
+
+    # Write column names
+    sheet.write(0, 0, col1_name)
+    sheet.write(0, 1, col2_name)
+    sheet.write(0, 2, col3_name)
+    
+    # Write email attachment info
+    row_number = 1
+    for email_attachment_report in email_attachment_report_list:
+        sheet.write(row_number, 0, email_attachment_report.name)
+        sheet.write(row_number, 1, email_attachment_report.parent_msg_filename)
+        sheet.write(row_number, 2, email_attachment_report.report_url)
+        row_number += 1
+
+    current_timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    excel_output_filename = current_timestamp + "_Cuckoo-Sandbox-Analysis-Report_msg-email-attachment-files.xlsx"
+    
+    book.save(excel_output_filename)
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
     print "Starting email parser...."
     
-    #filename = "/home/mark/Desktop/DELETE_FILES/test-email-parser-script/Test_Email_with-email-attachments.msg"
+    filename = "/home/mark/Desktop/DELETE_FILES/test-email-parser-script/Test_Email_with-email-attachments.msg"
     #filename = "C:\Users\Mark-Windows\Documents\Marks-OneDrive\OneDrive\grad-school_villanova-university\ece-8489_malware-analysis-and-defense_spring-2018\final-project\email-parser\test-emails\Test_Email_with-email-attachments.msg"
-    filename = "/Users/Mark-Windows/Documents/Marks-OneDrive/OneDrive/grad-school_villanova-university/ece-8489_malware-analysis-and-defense_spring-2018/final-project/email-parser/test-emails/Test_Email_with-email-attachments.msg"
+    #filename = "/Users/Mark-Windows/Documents/Marks-OneDrive/OneDrive/grad-school_villanova-university/ece-8489_malware-analysis-and-defense_spring-2018/final-project/email-parser/test-emails/Test_Email_with-email-attachments.msg"
     
     
     #email_file = olefile.open(filename, "rb")
@@ -168,7 +222,9 @@ if __name__ == "__main__":
         attachmentNames.append(filename)
         absolute_filenames.append(absolute_filename)
         
-    # Submit each email attachment to Cuckoo Sandbox for malware analysis
+    # Submit each email attachment to Cuckoo Sandbox for malware analysis and
+    # export Cuckoo Sandbox analysis info for all email attachments to Excel file
+    email_attachment_report_list = []
     for email_attachment_name in absolute_filenames:             
         REST_URL = "http://localhost:9001/tasks/create/file"
         
@@ -180,13 +236,16 @@ if __name__ == "__main__":
             files = {"file": (email_attachment_name, sample)}
             r = requests.post(REST_URL, files=files)
         
-        # Add your code to error checking for r.status_code.
-        
         task_id = r.json()["task_id"]
+        report_url = "http://localhost:9001/tasks/report/" + str(task_id)
         
-        print "File sent to Cuckoo Sandbox is: " + email_attachment_name + ", task_id (Cuckoo Sandbox id) is: " + str(task_id)
+        print "File sent to Cuckoo Sandbox is: " + email_attachment_name + ", task_id (Cuckoo Sandbox id) is: " + str(task_id) + ", report_url is: " + report_url
         
-        # Add your code for error checking if task_id is None.  
+        # Add report on email attachment to the report list
+        email_attachment_report_list.append(email_attachment_report(email_attachment_name, "<NEED-TO-ADD-PARENT-MSG-FILENAME-HERE>", report_url))
     
-    print "All email attachments have been submitted to Cuckoo Sandbox for malware analysis!"                                   
+    print "Creating Excel file with email attachment info..."
+    output_to_excel_file(email_attachment_report_list)
+        
+                                       
 
