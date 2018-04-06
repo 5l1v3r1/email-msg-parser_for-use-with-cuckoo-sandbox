@@ -23,7 +23,7 @@ Run python script (.py file) after modifying the hard-corded Cuckoo Sandbox URLs
 
 * **Mark Conover** - [GitHub](https://github.com/markconover)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/markconover/email-msg-parser_for-use-with-cuckoo-sandbox/contributors) who participated in this project.
 
 ## License
 

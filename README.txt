@@ -12,6 +12,8 @@ References (links to code that was copied/revised from):
     ** Version: 0.3
 
 TODO:
+    ** Add ability to accept multiple .msg files (NOT just one)
+        *** need to make "filename" reference (for filename of .msg file) set dynamically
     ** Install TOR node for accessing internet for malware that does network calls
     ** Install VirusTotal api key in Cuckoo Sandbox so it can connect & the "Antivirus" report tab can be filled out!
     ** Install community signatures!
