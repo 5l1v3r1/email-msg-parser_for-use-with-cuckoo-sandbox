@@ -1,4 +1,4 @@
-# Cuckoo Sandbox utility script for analyzing email attachments
+# Python script for analyzing email attachments (for use with Cuckoo Sandbox)
 
 Cuckoo Sandbox utility script for analyzing email attachments inside .msg files (Microsoft Outlook files) and exporting their analysis results to a Microsoft Excel file (.xlsx file).  This is mainly for Malware Analysts that want to stay organized when analyzing multiple email messages.
 
